@@ -7,6 +7,10 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+app.get('/', function(req, res) {
+    res.json({'Status':'OK'});
+});
+
 app.post('/', function(req, res) {
     res.header('Access-Control-Allow-Origin', '*');
 
@@ -31,8 +35,6 @@ app.post('/', function(req, res) {
     catch (ex) {
         res.json(400, { error: 'Could not decode request: ' + ex.message });
     }
-
-    res.end();
 });
 
 app.listen(80, function () {});
