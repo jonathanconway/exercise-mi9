@@ -1,15 +1,21 @@
 var express = require('express'),
     app = express(),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    logfmt = require("logfmt");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.all('*', function(req, res) {
-    res.header('Access-Control-Allow-Origin', '*');
+app.use(logfmt.requestLogger());
 
+app.all('*', function(req, res) {
+    console.log(req);
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
+    res.contentType("application/json");
+ 
     try {
         if (req.method !== 'POST') {
             throw 'Invalid request method. Expected POST.';
