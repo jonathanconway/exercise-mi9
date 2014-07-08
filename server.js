@@ -1,17 +1,14 @@
 var express = require('express'),
-    app = express(),
-    bodyParser = require('body-parser'),
-    logfmt = require("logfmt");
+    app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
-app.use(logfmt.requestLogger());
+app.use(function(req, res, next){
+    req.text = '';
+    req.setEncoding('utf8');
+    req.on('data', function(chunk){ req.text += chunk });
+    req.on('end', next);
+});
 
 app.all('*', function(req, res) {
-    console.log(req.body);
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Content-Type', 'application/json');
     res.contentType("application/json");
@@ -21,13 +18,15 @@ app.all('*', function(req, res) {
             throw 'Invalid request method. Expected POST.';
         }
 
-        if (!req.body.payload || !req.body.payload.push) {
+        var data = JSON.parse(req.text);
+
+        if (!data.payload || !data.payload.push) {
             throw 'Request data is incorrectly formatted.';
         }
 
         res.json({
             response:
-                req.body.payload
+                data.payload
                     .filter(function (payloadItem) {
                         return payloadItem.image &&
                                 payloadItem.drm &&
