@@ -37,4 +37,4 @@ app.post('/', function(req, res) {
     }
 });
 
-app.listen(80, function () {});
+app.listen(process.env.PORT || 5000, function () {});
