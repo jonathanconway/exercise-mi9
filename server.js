@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({
 app.use(logfmt.requestLogger());
 
 app.all('*', function(req, res) {
-    console.log(req);
+    console.log(req.body);
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Content-Type', 'application/json');
     res.contentType("application/json");
