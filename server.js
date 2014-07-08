@@ -7,11 +7,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.get('/', function(req, res) {
-    res.json({'Status':'OK'});
-});
-
-app.post('/', function(req, res) {
+app.post('*', function(req, res) {
     res.header('Access-Control-Allow-Origin', '*');
 
     try {
