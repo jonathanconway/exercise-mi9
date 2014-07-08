@@ -7,10 +7,18 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-app.post('*', function(req, res) {
+app.all('*', function(req, res) {
     res.header('Access-Control-Allow-Origin', '*');
 
     try {
+        if (req.method !== 'POST') {
+            throw 'Invalid request method. Expected POST.';
+        }
+
+        if (!req.body.payload || !req.body.payload.push) {
+            throw 'Request data is incorrectly formatted.';
+        }
+
         res.json({
             response:
                 req.body.payload
@@ -29,7 +37,7 @@ app.post('*', function(req, res) {
         });
     }
     catch (ex) {
-        res.json(400, { error: 'Could not decode request: ' + ex.message });
+        res.json(400, { error: 'Could not decode request: ' + ex });
     }
 });
 
