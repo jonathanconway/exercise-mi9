@@ -1,24 +1,23 @@
-var express = require('express'),
-    app = express();
+var app = require('express')();
 
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
+    // Retrieve POST content as text
     req.text = '';
-    req.setEncoding('utf8');
-    req.on('data', function(chunk){ req.text += chunk });
+    req.on('data', function (chunk) { req.text += chunk });
     req.on('end', next);
 });
 
 app.all('*', function(req, res) {
+    var data;
+
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Content-Type', 'application/json');
-    res.contentType("application/json");
  
     try {
         if (req.method !== 'POST') {
             throw 'Invalid request method. Expected POST.';
         }
 
-        var data = JSON.parse(req.text);
+        data = JSON.parse(req.text);
 
         if (!data.payload || !data.payload.push) {
             throw 'Request data is incorrectly formatted.';
